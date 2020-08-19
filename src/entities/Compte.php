@@ -83,7 +83,7 @@ class Compte
     private $client_moral;
 
     /**
-     * Compte constructor.
+     * CompteRepository constructor.
      */
     public function __construct()
     {
