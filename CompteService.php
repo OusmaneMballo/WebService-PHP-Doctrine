@@ -8,11 +8,12 @@ require_once "./src/entities/TypeFrais.php";
 require_once "./src/entities/ClientPhysique.php";
 require_once "./src/entities/TypeClient.php";
 require_once "./src/entities/ClientMoral.php";
+require_once "./src/entities/Transaction.php";
+require_once "./src/entities/TypeTransaction.php";
 if(isset($_GET['param']))
 {
     $param=$_GET['param'];
     $cmpte =$entityManager->getRepository('Compte')->findBy(array('numero' => $param));
-
     $retour["success"]=true;
     $retour["message"]="Liste des comptes";
     $retour["data"]["id"]=$cmpte[0]->getId();
@@ -24,7 +25,7 @@ if(isset($_GET['param']))
     $retour["data"]["dateFermeture"]=$cmpte[0]->getDateFermeture();
     $retour["data"]["dateFermTempo"]=$cmpte[0]->getDateFerTempo();
     $retour["data"]["type"]=$cmpte[0]->getTypeCompte()->getLibelle();
-    $retour["data"]["dateFermTempo"]=$cmpte[0]->getFraiBancaire();
+    $retour["data"]["dateFermTempo"]=$cmpte[0]->getDateFerTempo();
     $retour["data"]["dateReouverture"]=$cmpte[0]->getDateReouverture();
 
     if($cmpte[0]->getClientPhysique()!=null)
@@ -38,6 +39,7 @@ if(isset($_GET['param']))
         $tabCP["email"]=$cmpte[0]->getClientPhysique()->getEmail();
         $tabCP["profession"]=$cmpte[0]->getClientPhysique()->getProfession();
         $retour["data"]["clientPhysique"]=$tabCP;
+        $retour["data"]["clientMoral"]=null;
     }
     else
     {
@@ -48,7 +50,22 @@ if(isset($_GET['param']))
         $tabCM["ninea"]=$cmpte[0]->getClientMoral()->getNumIdentifiant();
         $tabCM["telephone"]=$cmpte[0]->getClientMoral()->getTelephone();
         $tabCM["email"]=$cmpte[0]->getClientMoral()->getEmail();
-        $retour["data"]["clientPhysique"]=$tabCM;
+        $retour["data"]["clientMoral"]=$tabCM;
+        $retour["data"]["clientPhysique"]=null;
+    }
+    if($cmpte[0]->getTransaction()!=null)
+    {
+        $listTransac=$cmpte[0]->getTransaction();
+        $i=0;
+        foreach ($listTransac as $transac)
+        {
+            $tabTransac["id"]=$transac->getId();
+            $tabTransac["montant"]=$transac->getMontant();
+            $tabTransac["date"]=$transac->getDate();
+            $tabTransac["type"]=$transac->getType()->getLibelle();
+            $tabListTransac[$i++]=$tabTransac;
+        }
+        $retour["data"]["list_transaction"]=$tabListTransac;
     }
 
     $result=json_encode($retour);
