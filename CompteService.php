@@ -8,7 +8,6 @@ require_once "./src/entities/TypeFrais.php";
 require_once "./src/entities/ClientPhysique.php";
 require_once "./src/entities/TypeClient.php";
 require_once "./src/entities/ClientMoral.php";
-$param="1234";
 if(isset($_GET['param']))
 {
     $param=$_GET['param'];

@@ -83,11 +83,18 @@ class Compte
     private $client_moral;
 
     /**
+     * One product has many features. This is the inverse side.
+     * @ORM\OneToMany(targetEntity="Transaction", mappedBy="compte")
+     */
+    private $transaction;
+
+    /**
      * CompteRepository constructor.
      */
     public function __construct()
     {
         $this->frai_bancaire=new ArrayCollection();
+        $this->transaction=new ArrayCollection();
     }
 
     /**
@@ -290,6 +297,22 @@ class Compte
     public function setClientMoral($client_moral)
     {
         $this->client_moral = $client_moral;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getTransaction()
+    {
+        return $this->transaction;
+    }
+
+    /**
+     * @param mixed $transaction
+     */
+    public function setTransaction($transaction)
+    {
+        $this->transaction = $transaction;
     }
 
 
